@@ -8,7 +8,8 @@ import com.resliv.test.telegrambot.exception.SaveException;
 import com.resliv.test.telegrambot.exception.UpdateException;
 import com.resliv.test.telegrambot.repository.SightRepository;
 import com.resliv.test.telegrambot.service.SightService;
-import org.springframework.data.domain.Example;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SightServiceImpl implements SightService {
 
     private static final String CITY_NOT_FOUND = "This city doesn't exist";
@@ -23,11 +25,6 @@ public class SightServiceImpl implements SightService {
 
     private final SightRepository sightRepository;
     private final Converter converter;
-
-    public SightServiceImpl(SightRepository sightRepository, Converter converter) {
-        this.sightRepository = sightRepository;;
-        this.converter = converter;
-    }
 
     @Override
     public List<SightDto> findAllByCity(String city) {
@@ -59,7 +56,7 @@ public class SightServiceImpl implements SightService {
 
     @Override
     public SightDto update(Sight sight) {
-        if (!sightRepository.exists(Example.of(sight))) {
+        if (!sightRepository.existsById(sight.getId())) {
             throw new UpdateException("Sight " + sight.getName() + " is not exists.");
         }
 

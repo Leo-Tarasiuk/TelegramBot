@@ -4,19 +4,18 @@ import com.resliv.test.telegrambot.dto.CityDto;
 import com.resliv.test.telegrambot.dto.SightDto;
 import com.resliv.test.telegrambot.entity.City;
 import com.resliv.test.telegrambot.entity.Sight;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Converter {
 
     private final ModelMapper modelMapper;
-
-    public Converter(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
 
     public SightDto convertToDto(Sight sight) {
         return modelMapper.map(sight, SightDto.class);

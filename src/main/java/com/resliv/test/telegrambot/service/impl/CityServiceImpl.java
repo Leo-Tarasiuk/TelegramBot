@@ -9,7 +9,8 @@ import com.resliv.test.telegrambot.exception.SaveException;
 import com.resliv.test.telegrambot.exception.UpdateException;
 import com.resliv.test.telegrambot.repository.CityRepository;
 import com.resliv.test.telegrambot.service.CityService;
-import org.springframework.data.domain.Example;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
     private final Converter converter;
-
-    public CityServiceImpl(CityRepository cityRepository, Converter converter) {
-        this.cityRepository = cityRepository;
-        this.converter = converter;
-    }
 
     @Override
     public PageCity findAll(Pageable pageable) {
@@ -65,7 +62,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public CityDto update(City city) {
-        if (!cityRepository.exists(Example.of(city))) {
+        if (!cityRepository.existsById(city.getId())) {
             throw new UpdateException("City " + city.getName() + " is not exists.");
         }
 
